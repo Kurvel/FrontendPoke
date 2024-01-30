@@ -35,6 +35,7 @@ function fetchPokemonInfo(pokemon) {
 
 function printPokemonInfo(pokemonData) {
     pokemonInfo.innerHTML = "";
+    pokemonAbilities.innerHTML = "";
     console.log(pokemonData);
      
 
