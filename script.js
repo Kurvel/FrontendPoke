@@ -21,51 +21,62 @@ function fetchBackend(url) {
         .then(data => printBackend(data)); 
 }
 
-fetchBackend(backendPokiedexUrl);
+
 
 function printBackend(backendData) {
     
     let backendList = backendData;
-    console.log(backendList);
+    let pokemonArray = [];
+    //console.log(backendList);
     backendList.map(pokemonId => {
-        console.log(pokemonId.id);
+       // console.log(pokemonId.id);
 
         fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId.id}/`)
        .then(res => res.json())
-       .then(pokemonData => console.log(pokemonData.name))
+       .then(pokemonData => {  
+        pokemonArray = [pokemonData];
+        console.log(pokemonArray);
+        pokemonArray.map(pokemon => {
+            let li = document.createElement("li");
+            li.innerText = pokemon.name;
+
+            li.addEventListener("click", () => {
+                fetchPokemonInfo(pokemon);
+            })
+
+            let deleteBtn = document.createElement("button");
+            deleteBtn.innerText = ("delete");
+
+            deleteBtn.addEventListener("click", () => {
+                console.log("Radera: ", pokemon.id);
+                fetch("http://localhost:8080/pokemon?id=" + pokemon.id, {
+                    method: "DELETE"
+                })
+                .then(res => res.json())
+                .then(data => {
+                    console.log("delete: ", data);
+                })
+            })
+
+            pokemonList.append(li, deleteBtn);
+        })
+        
+       });
         
     })
 }
 
- // pokemonList.innerHTML = "";
-    // let fetchPokemonUrl = fetch(pokemonUrl).then(res => res.json()); 
-    // let fetchBackendPokiedexUrl = fetch(backendPokiedexUrl).then(res => res.json());
-    // Promise.all([fetchPokemonUrl, fetchBackendPokiedexUrl]).then((data) => {
-        
-    //     let pokeApis = data[0].results;
-    //     console.log(pokeApis);
-    //     let pokeBackend = data[1];
-    //     console.log(pokeBackend);
-    
-    //     pokeApis.map(pokeApi => {
-    //         let li = document.createElement("li");
-    //         li.innerText = pokeApi.url;
-    //         pokemonList.appendChild(li);
-    //     })
-    // })
-
-
-
-
 pokiedexBtn.addEventListener("click", function () {
-   
+    pokemonList.innerHTML = "";
+    pokemonInfo.innerHTML = "";
+    pokemonAbilities.innerHTML = "";
+    fetchBackend(backendPokiedexUrl);
     
         
     });
 
-
 function printPokemons(pokemons) {
-     console.log(pokemons);
+     //console.log(pokemons);
     pokemonList.innerHTML = "";
     pokemons.forEach(pokemon => {
         let li = document.createElement("li");
@@ -100,6 +111,26 @@ function printPokemonInfo(pokemonData) {
 
     let pokemonHeight = document.createElement("p");
     pokemonHeight.innerText = "height: " + pokemonData.height;
+
+    let addToPokiedexBtn = document.createElement("button");
+    addToPokiedexBtn.innerText = ("add to pokedex");
+
+    
+
+    addToPokiedexBtn.addEventListener("click", () => {
+        console.log(pokemonData.id);
+        fetch("http://localhost:8080/pokemon", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({id: pokemonData.id})
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log("data: ", data);
+        })
+    });
     
     
 
@@ -120,7 +151,7 @@ function printPokemonInfo(pokemonData) {
     
 
 
-    pokemonDiv.append(pokemonName, pokemonSprite, pokemonWeight, pokemonHeight);
+    pokemonDiv.append(pokemonName, pokemonSprite, pokemonWeight, pokemonHeight, addToPokiedexBtn);
     pokemonInfo.appendChild(pokemonDiv);
 
 }
