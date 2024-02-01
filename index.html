@@ -10,12 +10,16 @@
 </head>
 <body>
     <h1>Pokémon API</h1>
-    <div>
-        <br><button id="pokiedexBtn">Pokidex</button>
+    
+    <div id="menu">
+        <button onclick="start()">Start</button>
+        <button id="pokiedexBtn">Pokidex</button>
+        <input id="searchInput" type="text">
+        <button onclick="searchPokemon()">Search</button>
     </div>
     
 </div>
-<div id="Pokemon">
+<div id="pokemon">
 <ul id="pokemonList"></ul>
 </div>
 <div id="pokemonInfo">
