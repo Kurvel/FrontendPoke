@@ -30,6 +30,7 @@ function searchPokemon() {
       console.log(searchArray);
       printPokemons(searchArray);
     });
+    searchInput = document.getElementById("searchInput").value = "";
 
 }
 function start() {
@@ -178,7 +179,8 @@ function printPokemonInfo(pokemonData) {
             console.log("notice: ", data);
           });
       });
-      
+      pokemonInfo.innerHTML = "";
+      pokemonAbilities.innerHTML = "";
   });
 
   let pokemonSprite = document.createElement("img");
